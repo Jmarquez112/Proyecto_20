@@ -28,8 +28,8 @@ struct Camiones {
 };
 int main() {
     Camiones flota[MaxCamiones];
-    float historialCargas[MaxCamiones][10] = {0};
-    int numCargas[MaxCamiones] = {0};
+    float historialCargas[MaxCamiones][10];
+    int numCargas[MaxCamiones];
 
     int cantidadCamiones = 0;
     int opcion;
