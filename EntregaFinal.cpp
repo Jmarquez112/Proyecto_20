@@ -112,11 +112,51 @@ int main() {
             }
             case 3: {
                 if (cantidadCamiones == 0) {
+                    cout<<"No hay camiones registrados.\n";
+                    break;
+                }
+                int indice;
+                float carga;
+                cout<<"Seleccione un camión:\n";
+                for (int i = 0; i < cantidadCamiones; ++i) {
+                    cout<<"Camión #"<<(i + 1)<<": "<<flota[i].Matricula<<"\n";
+                }
+                cin>>indice;
+                if (indice < 1 || indice > cantidadCamiones) {
+                    cout<<"Número de camión inválido.\n";
+                    break;
+                }
+                do{
+                    cout<<"Ingrese el peso de la carga: ";
+                    cin>>carga;
+                    if (carga<=0)
+                        cout<<"El peso de la carga debe ser mayor que cero.\n";
+                }while(carga<=0);
+                if (carga <= 0) {
+                    break;
+                }
+                Camiones &camion = flota[indice - 1];
+                if (camion.PesoActual + carga <= camion.PesoMax) {
+                    camion.PesoActual += carga;
+                    cout<<"Carga añadida con éxito.\n";
+                    if (numCargas[indice - 1] < 100) {
+                        historialCargas[indice - 1][numCargas[indice - 1]] = carga;
+                        numCargas[indice - 1]++;
+                    } else {
+                        cout<<"Historial de cargas lleno para este camión.\n";
+                    }
+                } else {
+                    cout<<"No se puede cargar: supera el límite de peso.\n";
+                }
+                break;
+            }
+            case 4: {
+                if (cantidadCamiones == 0) {
                     cout << "No hay camiones registrados.\n";
                     break;
                 }
                 string mat;
-                cout << "Ingrese la matrícula del camión que desea cargar: ";
+                cout << "Ingrese la matrícula del camión que desea descargar: ";
                 cin >> mat;
                 int indice = -1;
                 for (int i = 0; i < cantidadCamiones; ++i) {
@@ -129,61 +169,20 @@ int main() {
                     cout << "Camión no encontrado.\n";
                     break;
                 }
-                float carga;
-                do {
-                    cout << "Ingrese el peso de la carga: ";
-                    cin >> carga;
-                    if (carga <= 0)
-                        cout << "El peso de la carga debe ser mayor que cero.\n";
-                } while (carga <= 0);
-                Camiones &camion = flota[indice];
-                if (camion.PesoActual + carga <= camion.PesoMax) {
-                    camion.PesoActual += carga;
-                    cout << "Carga añadida con éxito.\n";
-                    if (numCargas[indice] < 100) {
-                        historialCargas[indice][numCargas[indice]] = carga;
-                        numCargas[indice]++;
-                    } 
-                    else {
-                        cout << "Historial de cargas lleno para este camión.\n";
-                    }
-                } 
-                else {
-                    cout << "No se puede cargar: supera el límite de peso.\n";
-                }
-                break;
-            }   
-            case 4: {
-                if (cantidadCamiones == 0) {
-                    cout<<"No hay camiones registrados.\n";
-                    break;
-                }
-                int indice;
                 float descarga;
-                cout<<"Seleccione un camión:\n";
-                for (int i = 0; i < cantidadCamiones; ++i) {
-                    cout<<"Camión #"<<(i + 1)<<": "<<flota[i].Matricula<<"\n";
-                }
-                cin>>indice;
-                if (indice < 1 || indice > cantidadCamiones) {
-                    cout<<"Número de camión inválido.\n";
-                    break;
-                }
-                do{
-                    cout<<"Ingrese el peso a descargar: ";
-                    cin>>descarga;
-                    if (descarga<=0)
-                        cout<<"El peso a descargar debe ser mayor que cero.\n";
-                }while(descarga<=0);
-                if (descarga <= 0) {
-                    break;
-                }
-                Camiones &camion = flota[indice - 1];
+                do {
+                    cout << "Ingrese el peso a descargar: ";
+                    cin >> descarga;
+                    if (descarga <= 0)
+                        cout << "El peso debe ser mayor que cero.\n";
+                } while (descarga <= 0);
+                Camiones &camion = flota[indice];
                 if (descarga <= camion.PesoActual) {
                     camion.PesoActual -= descarga;
-                    cout<<"Descarga realizada con éxito.\n";
-                } else {
-                    cout<<"No puedes descargar más peso del que tiene el camión.\n";
+                    cout << "Descarga realizada con éxito.\n";
+                } 
+                else {
+                    cout << "No se puede descargar más del peso actual del camión.\n";
                 }
                 break;
             }
